@@ -20,8 +20,7 @@ public class Main {
 
         System.out.println("Mode: " + mode(array));
 
-        int[] evenOddArray = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-        System.out.println("Even before odd: " + Arrays.toString(evenBeforeOdd(evenOddArray)));
+        System.out.println("Even before odd: " + Arrays.toString(evenBeforeOdd(array)));
 
     }
 
