@@ -1,118 +1,116 @@
 // ISD-22 Tischenko Danylo
 // Sprint 2
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        int[] array = { 1, 2, 3, 3, 4, 4, 5, 23, 4, 2, 3 };
+        System.out.println("Task 1: (intersect)");
+        int[] arr1 = {1, 4, 8, 9, 11, 15, 17, 28, 41, 59};
+        int[] arr2 = {4, 7, 11, 17, 19, 20, 23, 28, 37, 59, 81};
+        System.out.println(Arrays.toString(intersect(arr1, arr2)));
 
-        System.out.println("Input array: " + Arrays.toString(array));
-        System.out.println("Input value: 2");
+        System.out.println("\nTask 2: (reverse)");
+        ArrayList<Integer> list = new ArrayList<>(Arrays.asList(2, 3, 4, 5, 6, 7, 8, 9, 10));
+        reverse(list);
+        System.out.println(list);
 
-        System.out.println("Last index of value: " + lastIndexOf(array, 2));
-        System.out.println("All indexes of value: " + Arrays.toString(allIndexesOf(array, 2)));
+        ArrayList<String> list2 = new ArrayList<>(Arrays.asList("apple", "bananas", "orange", "kiwis", "strawberry"));
 
-        int[] sortedArray = {1, 2, 3, 18, 19, 45, 85, 100};
+        System.out.println("\nTask 3: (capitalizePlurals)");
+        capitalizePlurals(list2);
+        System.out.println(list2);
 
-        System.out.println("Is sorted: " + isSorted(sortedArray));
-        System.out.println("Is sorted (known false): " + isSorted(array));
+        System.out.println("\nTask 4: (removePlurals)");
+        removePlurals(list2);
+        System.out.println(list2);
 
-        System.out.println("Mode: " + mode(array));
-
-        int[] evenOddArray = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-        System.out.println("Even before odd: " + Arrays.toString(evenBeforeOdd(evenOddArray)));
-
+        System.out.println("\nTask 5: (readFile)");
+        readFile("src/numbers.txt");
     }
 
-    public static int lastIndexOf(int[] array, int value) {
-        int index = -1;
-
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] == value) {
-                index = i;
-            }
-        }
-
-        return index;
-    }
-
-    public static int[] allIndexesOf(int[] array, int value) {
-        int[] indexes = new int[0];
-
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] == value) {
-                indexes = Arrays.copyOf(indexes, indexes.length + 1);
-                indexes[indexes.length - 1] = i;
-            }
-        }
-
-        if(indexes.length == 0) return null;
-
-        return indexes;
-    }
-
-    public static boolean isSorted(int[] array) {
-        boolean isSorted = true;
-
-        for (int i = 0; i < array.length - 1; i++) {
-            if (array[i + 1] < array[i]) {
-                isSorted = false;
-                break;
-            }
-        }
-
-        return isSorted;
-    }
-
-    public static int mode(int[] array) {
-        if (array.length == 0) return -1;
-        if (array.length == 1) return array[0];
-
-        int[] frequency = new int[101];
-
-        for (int i = 0; i < array.length; i++) {
-            if(array[i] >= 0 && array[i] <= 100) {
-                frequency[array[i]]++;
-            }
-        }
-
-        int mostFrequent = 0;
-
-        for (int i = 0; i < frequency.length; i++) {
-            int newFreq = frequency[i];
-            int oldFreq = frequency[mostFrequent];
-
-            if(newFreq > oldFreq) {
-                mostFrequent = i;
-                continue;
-            }
-
-            if(newFreq == oldFreq) {
-                mostFrequent = Math.min(mostFrequent, i);
-            }
-        }
-
-        return mostFrequent;
-    }
-
-    public static int[] evenBeforeOdd(int[] array) {
-        int evenIndex = 0;
-        int oddIndex = array.length - 1;
-
-        for (; evenIndex < oddIndex; evenIndex++) {
-            if(array[evenIndex] % 2 == 1) {
-                for (; oddIndex > evenIndex; oddIndex--) {
-                    if(array[oddIndex] % 2 == 0) {
-                        int temp = array[evenIndex];
-                        array[evenIndex] = array[oddIndex];
-                        array[oddIndex] = temp;
-                        break;
-                    }
+    public static int[] intersect(int[] list1, int[] list2) {
+        int[] result = new int[0];
+        for (int i = 0; i < list1.length; i++) {
+            for (int j = 0; j < list2.length; j++)
+                if (list1[i] == list2[j]) {
+                    result = Arrays.copyOf(result, result.length + 1);
+                    result[result.length - 1] = list1[i];
                 }
+        }
+        return result;
+    }
+
+    public static void reverse(ArrayList<Integer> list) {
+        for (int i = 0; i < list.size() / 2; i++) {
+            int temp = list.get(i);
+            list.set(i, list.get(list.size() - 1 - i));
+            list.set(list.size() - 1 - i, temp);
+        }
+    }
+
+    public static void capitalizePlurals(ArrayList<String> list) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).endsWith("s")) {
+                String item = list.get(i);
+                String firstLetter = item.substring(0, 1).toUpperCase();
+
+                list.set(i, firstLetter + item.substring(1));
             }
         }
+    }
 
-        return array;
+    public static void removePlurals(ArrayList<String> list) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).endsWith("s")) {
+                list.remove(i);
+            }
+        }
+    }
+
+    // Напишіть програму, яка читає файл, заповнений цілими числами, і відображає
+    //всі числа у вигляді списку в консоль, а потім:
+    //- Виводить середнє всіх чисел з списку.
+    //- Виводить найбільше та найменше число з списку.
+    //- Виводить всі парні числа з списку.
+
+    public static void readFile(String fileName) {
+        try {
+            File file = new File(fileName);
+            Scanner scanner = new Scanner(file);
+            ArrayList<Integer> list = new ArrayList<>();
+            while (scanner.hasNextInt()) {
+                list.add(scanner.nextInt());
+            }
+            System.out.print("Numbers: ");
+            System.out.println(list);
+            int sum = 0;
+            for (int i = 0; i < list.size(); i++) {
+                sum += list.get(i);
+            }
+            System.out.println("Average: " + sum / list.size());
+            int max = list.get(0);
+            int min = list.get(0);
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i) > max)
+                    max = list.get(i);
+                if (list.get(i) < min)
+                    min = list.get(i);
+            }
+            System.out.println("Max: " + max);
+            System.out.println("Min: " + min);
+
+            System.out.print("Even numbers: ");
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i) % 2 == 0)
+                    System.out.print(list.get(i) + " ");
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+        }
     }
 }
